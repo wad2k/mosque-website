@@ -9,7 +9,7 @@ export default function Home() {
 
   <div className="max-w-4xl mx-auto flex flex-col items-center gap-6">
     <h1 className="text-5xl font-extrabold leading-tight">
-      Welcome to Our Community Mosque
+      Sheerwater Muslim Education & Welfare Trust
     </h1>
     <p className="text-xl opacity-90 max-w-2xl">
       A home for worship, learning, and unity.
