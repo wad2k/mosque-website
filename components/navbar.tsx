@@ -18,7 +18,8 @@ export default function Navbar() {
 
   return (
     <nav className="w-full bg-green-800 text-white shadow-lg">
-      <div className="max-w-6xl mx-auto flex justify-between items-center p-4">
+      <div className="w-full flex justify-between items-center p-4">
+
         <Link href="/" className="font-extrabold text-xl">
           SMEWT
         </Link>
