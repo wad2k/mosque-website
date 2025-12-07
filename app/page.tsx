@@ -74,7 +74,10 @@ updateCountdown(tomorrow);
     <main className="flex flex-col items-center justify-center text-center">
       {/* Hero Section */}
       {/* Hero Section */}
-<section className="relative w-full bg-green-800 text-white py-28 px-6">
+<section 
+  className="relative w-full text-white py-28 px-6 bg-green-900"
+>
+
   {/* Gold accent bar */}
   <div className="absolute bottom-0 left-0 w-full h-2 bg-yellow-500"></div>
 

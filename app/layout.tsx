@@ -2,11 +2,18 @@ import "./globals.css";
 import type { Metadata } from "next";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
+import { Cairo } from "next/font/google";
+
+const cairo = Cairo({
+  subsets: ["latin"],
+  weight: ["300", "400", "600", "700"]
+});
 
 export const metadata: Metadata = {
-  title: "Mosque Website",
+  title: "Sheerwater Mosque",
   description: "A welcoming community mosque website",
 };
+
 
 export default function RootLayout({
   children,
@@ -15,7 +22,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="flex flex-col min-h-screen bg-white">
+      <body className={`flex flex-col min-h-screen bg-white ${cairo.className}`}>
+
         <Navbar />
         <main className="flex-1 max-w-5xl mx-auto p-4">{children}</main>
         <Footer />
