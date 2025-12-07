@@ -102,6 +102,17 @@ updateCountdown(tomorrow);
           Prayer Times
         </h2>
 
+        {/* Jumu'ah Times */}
+<div className="mt-6 bg-yellow-100 border-l-4 border-yellow-600 p-4 rounded-md shadow-md max-w-xl mx-auto">
+  <h3 className="text-xl font-bold text-green-900">Jumu’ah (Friday)</h3>
+  <p className="text-green-800 font-semibold">
+    Khutbah: 12:30 PM
+  </p>
+  <p className="text-green-700 text-sm opacity-80">
+    (Timings subject to adjustment — check announcements)
+  </p>
+</div>
+
         {nextPrayer && (
           <p className="text-lg font-semibold text-green-700 mb-4">
             Next prayer: {nextPrayer} – {countdown}
@@ -119,6 +130,8 @@ updateCountdown(tomorrow);
             </div>
           ))}
         </div>
+
+        
       </section>
 
     </main>
