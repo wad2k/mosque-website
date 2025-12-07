@@ -1,4 +1,75 @@
+"use client";
+
+import { useState, useEffect } from "react";
+
 export default function Home() {
+  const [timings, setTimings] = useState<any>(null);
+  const [nextPrayer, setNextPrayer] = useState<string>("");
+  const [countdown, setCountdown] = useState<string>("");
+
+  useEffect(() => {
+    async function fetchTimes() {
+      const res = await fetch(
+        "https://api.aladhan.com/v1/timingsByCity?city=Woking&country=United%20Kingdom&method=2"
+      );
+      const data = await res.json();
+      const times = data.data.timings;
+      setTimings(times);
+      calculateNextPrayer(times);
+    }
+    fetchTimes();
+  }, []);
+
+  const calculateNextPrayer = (times: any) => {
+    const now = new Date();
+    const order = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"];
+
+    for (let prayer of order) {
+      const time = times[prayer].split(" ")[0];
+      const [hour, minute] = time.split(":").map(Number);
+
+      const prayerTime = new Date();
+      prayerTime.setHours(hour);
+      prayerTime.setMinutes(minute);
+      prayerTime.setSeconds(0);
+
+      if (prayerTime > now) {
+        setNextPrayer(prayer);
+        updateCountdown(prayerTime);
+        return;
+      }
+    }
+
+    setNextPrayer("Fajr");
+
+// Prepare tomorrow's fajr time correctly
+const [hour, minute] = times["Fajr"].split(" ")[0].split(":").map(Number);
+const tomorrow = new Date();
+tomorrow.setDate(tomorrow.getDate() + 1);
+tomorrow.setHours(hour);
+tomorrow.setMinutes(minute);
+tomorrow.setSeconds(0);
+
+updateCountdown(tomorrow);
+  };
+
+  const updateCountdown = (target: Date) => {
+    const update = () => {
+      const now = new Date();
+      const diff = target.getTime() - now.getTime();
+
+      if (diff <= 0) return;
+
+      const hours = Math.floor(diff / (1000 * 60 * 60));
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      setCountdown(`${hours}h ${minutes}m`);
+    };
+
+    update();
+    setInterval(update, 60000);
+  };
+
+
   return (
     <main className="flex flex-col items-center justify-center text-center">
       {/* Hero Section */}
@@ -26,26 +97,29 @@ export default function Home() {
 
 
       {/* Prayer Times */}
-<section className="max-w-4xl w-full py-16 px-6">
-  <h2 className="text-3xl font-bold text-green-800 mb-4">Prayer Times</h2>
-  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-gray-800">
-    <div className="p-4 bg-green-50 rounded-lg text-center shadow">
-      Fajr<br /><span className="font-semibold text-lg">Soon</span>
-    </div>
-    <div className="p-4 bg-green-50 rounded-lg text-center shadow">
-      Dhuhr<br /><span className="font-semibold text-lg">Soon</span>
-    </div>
-    <div className="p-4 bg-green-50 rounded-lg text-center shadow">
-      Asr<br /><span className="font-semibold text-lg">Soon</span>
-    </div>
-    <div className="p-4 bg-green-50 rounded-lg text-center shadow">
-      Maghrib<br /><span className="font-semibold text-lg">Soon</span>
-    </div>
-    <div className="p-4 bg-green-50 rounded-lg text-center shadow">
-      Isha<br /><span className="font-semibold text-lg">Soon</span>
-    </div>
-  </div>
-</section>
+ <section className="max-w-4xl w-full py-16 px-6">
+        <h2 className="text-3xl font-bold text-green-800 mb-4">
+          Prayer Times
+        </h2>
+
+        {nextPrayer && (
+          <p className="text-lg font-semibold text-green-700 mb-4">
+            Next prayer: {nextPrayer} – {countdown}
+          </p>
+        )}
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-gray-800">
+          {["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"].map((prayer) => (
+            <div key={prayer} className="p-4 bg-green-50 rounded-lg text-center shadow">
+              {prayer}
+              <br />
+              <span className="font-semibold text-lg">
+                {timings ? timings[prayer].split(" ")[0] : "Loading..."}
+              </span>
+            </div>
+          ))}
+        </div>
+      </section>
 
     </main>
   );
